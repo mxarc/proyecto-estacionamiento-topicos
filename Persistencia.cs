@@ -71,34 +71,34 @@ namespace ProyectoEstacionamientos
             return lista;
         }
 
-        public int DiferenciaMinutos(string matricula)
+        public int DiferenciaMinutos(string codigoEntrada)
         {
+
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
             {
                 errores = UsoBD.ESalida;
-                return false;
+                return 0;
             }
-            string strComando = "SELECT * FROM RegistroEntradas WHERE MatriculaAuto = @matricula";
-            SqlCommand cmd = new SqlCommand(strComando, conn);
-            cmd.Parameters.AddWithValue("@matricula", matricula);
-            bool resultado = false;
-            try
+            SqlDataReader lector;
+            string strComando = "SELECT DiffMinutos=DATEDIFF(minute, HoraEntrada, GETDATE()) FROM RegistroEntradas WHERE CodigoEntrada= " + codigoEntrada.Trim();
+            lector = UsoBD.Consulta(strComando, conn);
+            if (lector == null)
             {
-                var r = cmd.ExecuteReader();
-                if (r.HasRows)
+                errores = UsoBD.ESalida;
+                conn.Close();
+                return 0;
+            }
+            int diff = 0;
+            if (lector.HasRows)
+            {
+                while (lector.Read())
                 {
-                    resultado = true;
+                    diff = int.Parse(lector.GetValue(0).ToString());
                 }
             }
-            catch (SqlException e)
-            {
-                errores = e;
-                conn.Close();
-                return true;
-            }
             conn.Close();
-            return resultado;
+            return diff;
         }
 
         public bool ClaveCajonExiste(string clave)

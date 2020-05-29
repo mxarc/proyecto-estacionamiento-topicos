@@ -36,6 +36,8 @@ namespace ProyectoEstacionamientos
         private void ButtonCalcularCosto_Click(object sender, EventArgs e)
         {
             CapaPersistencia capaPersistencia = new CapaPersistencia();
+            int diffMinutos = capaPersistencia.DiferenciaMinutos(textBoxCodigoEntrada.Text);
+            // convertir a minutos
         }
     }
 }
