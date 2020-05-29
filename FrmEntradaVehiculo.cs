@@ -1,22 +1,16 @@
 ﻿using ProyectoEstacionamientos.clases;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProyectoEstacionamientos
 {
-    public partial class FrmAltaVehiculo : Form
+    public partial class FrmEntradaVehiculo : Form
     {
         readonly ErrorProvider errorP = new ErrorProvider();
 
-        public FrmAltaVehiculo()
+        public FrmEntradaVehiculo()
         {
             InitializeComponent();
         }
@@ -40,14 +34,19 @@ namespace ProyectoEstacionamientos
 
         private void FrmAltaVehiculo_Load(object sender, EventArgs e)
         {
-            checarDisponibilidadCajones();
+            ChecarDisponibilidadCajones();
+            GenerarCodigoAleatorio();
+        }
+
+        private void GenerarCodigoAleatorio()
+        {
             textBoxCodigoEntrada.Text = Utilidades.RandomString(8, false);
         }
 
-        private void checarDisponibilidadCajones()
+        private void ChecarDisponibilidadCajones()
         {
             CapaPersistencia persistencia = new CapaPersistencia();
-            List<CajonEstacionamiento> lista = persistencia.RegresaCajones(true);
+            List<clases.VehiculoEstacionado> lista = persistencia.RegresaCajones(true);
             if (lista == null)
             {
                 MessageBox.Show("Error al conectar con la base de datos");
@@ -65,7 +64,7 @@ namespace ProyectoEstacionamientos
                     Close();
                     return;
                 }
-                foreach (CajonEstacionamiento cajon in lista)
+                foreach (clases.VehiculoEstacionado cajon in lista)
                 {
                     comboBoxCajones.Items.Add(cajon.GetClave());
                     comboBoxCajones.SelectedIndex = 0;
@@ -124,18 +123,29 @@ namespace ProyectoEstacionamientos
                 MessageBox.Show("Este código de entrada ya existe en la BD", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            // checar que la matricula no este estacionada
+            if (capaPersistencia.MatriculaYaEstaEstacionada(matricula))
+            {
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                MessageBox.Show("Ya hay un vehículo estacionado con esa matrícula", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            // checar que la clve de cajón si existe 
+            if (!capaPersistencia.ClaveCajonExiste(cajon))
+            {
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                MessageBox.Show("Ese cajón no existe", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             // todo bien, guardar entrada vehiculo:
-            Console.WriteLine(codigo);
-            Console.WriteLine(matricula);
-            Console.WriteLine(cajon);
             capaPersistencia.AgregarEntradaVehiculo(codigo, matricula, int.Parse(cajon));
             Cursor = Cursors.Arrow;
             MessageBox.Show("Entrada añadida con éxito", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            comboBoxCajones.Items[comboBoxCajones.SelectedIndex] = ""; // quitar el cajón de la lista
             LimpiarValores();
-            checarDisponibilidadCajones();
         }
 
-        private void textBoxCodigoEntrada_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxCodigoEntrada_KeyUp(object sender, KeyEventArgs e)
         {
             if (textBoxCodigoEntrada.Text.Length > 8)
             {
@@ -147,6 +157,11 @@ namespace ProyectoEstacionamientos
             {
                 errorP.SetError(textBoxCodigoEntrada, "");
             }
+        }
+
+        private void ButtonGenerarCodigo_Click(object sender, EventArgs e)
+        {
+            GenerarCodigoAleatorio();
         }
     }
 }

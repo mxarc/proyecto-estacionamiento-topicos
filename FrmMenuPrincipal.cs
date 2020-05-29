@@ -59,8 +59,8 @@ namespace ProyectoEstacionamientos
         private void EntradaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-            FrmAltaVehiculo frmAltaVehiculo = new FrmAltaVehiculo();
-            frmAltaVehiculo.Show();
+            FrmEntradaVehiculo frmEntradaVehiculo = new FrmEntradaVehiculo();
+            frmEntradaVehiculo.Show();
             Cursor = Cursors.Arrow; // change cursor to normal type
         }
 
@@ -69,6 +69,14 @@ namespace ProyectoEstacionamientos
             Cursor = Cursors.WaitCursor; // change cursor to hourglass type
             FrmConsultaAutosEstacionados frmConsultaAutosEstacionados = new FrmConsultaAutosEstacionados();
             frmConsultaAutosEstacionados.Show();
+            Cursor = Cursors.Arrow; // change cursor to normal type
+        }
+
+        private void SalidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+            FrmSalidaVehiculo frmSalidaVehiculo = new FrmSalidaVehiculo();
+            frmSalidaVehiculo.Show();
             Cursor = Cursors.Arrow; // change cursor to normal type
         }
     }

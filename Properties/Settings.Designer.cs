@@ -22,16 +22,5 @@ namespace ProyectoEstacionamientos.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=proyecto-katy.cuudienhvlr5.us-west-1.rds.amazonaws.com;Initial Catalo" +
-            "g=estacionamiento;Persist Security Info=True;User ID=admin;Password=puredepapa")]
-        public string estacionamientoConnectionString {
-            get {
-                return ((string)(this["estacionamientoConnectionString"]));
-            }
-        }
     }
 }

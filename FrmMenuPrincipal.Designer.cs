@@ -61,7 +61,8 @@
             this.masToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(863, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(647, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -81,7 +82,7 @@
             this.cajónDeEstacionamientoToolStripMenuItem,
             this.pensiónToolStripMenuItem});
             this.altasToolStripMenuItem.Name = "altasToolStripMenuItem";
-            this.altasToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.altasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.altasToolStripMenuItem.Text = "Altas";
             // 
             // cajónDeEstacionamientoToolStripMenuItem
@@ -104,21 +105,22 @@
             this.entradaToolStripMenuItem,
             this.salidaToolStripMenuItem});
             this.autosToolStripMenuItem.Name = "autosToolStripMenuItem";
-            this.autosToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.autosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.autosToolStripMenuItem.Text = "Autos";
             // 
             // entradaToolStripMenuItem
             // 
             this.entradaToolStripMenuItem.Name = "entradaToolStripMenuItem";
-            this.entradaToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.entradaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.entradaToolStripMenuItem.Text = "Entrada";
             this.entradaToolStripMenuItem.Click += new System.EventHandler(this.EntradaToolStripMenuItem_Click);
             // 
             // salidaToolStripMenuItem
             // 
             this.salidaToolStripMenuItem.Name = "salidaToolStripMenuItem";
-            this.salidaToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.salidaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.salidaToolStripMenuItem.Text = "Salida";
+            this.salidaToolStripMenuItem.Click += new System.EventHandler(this.SalidaToolStripMenuItem_Click);
             // 
             // consultaToolStripMenuItem
             // 
@@ -180,10 +182,9 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(500, 105);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox2.Location = new System.Drawing.Point(375, 85);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(299, 239);
+            this.pictureBox2.Size = new System.Drawing.Size(224, 194);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
@@ -193,8 +194,7 @@
             this.titleLabel.AutoSize = true;
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
             this.titleLabel.Font = new System.Drawing.Font("Montserrat Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(53, 123);
-            this.titleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.titleLabel.Location = new System.Drawing.Point(40, 100);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(304, 26);
             this.titleLabel.TabIndex = 3;
@@ -202,11 +202,11 @@
             // 
             // FrmMenuPrincipal
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(249)))), ((int)(((byte)(249)))));
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(863, 430);
+            this.ClientSize = new System.Drawing.Size(647, 349);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.menuStrip1);
@@ -214,7 +214,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "FrmMenuPrincipal";
             this.Text = "Sistema de Estacionamiento";

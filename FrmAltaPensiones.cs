@@ -23,7 +23,7 @@ namespace ProyectoEstacionamientos
         {
             CapaPersistencia persistencia = new CapaPersistencia();
             // obtener cajones DISPONIBLES
-            List<CajonEstacionamiento> lista = persistencia.RegresaCajones(true);
+            List<clases.VehiculoEstacionado> lista = persistencia.RegresaCajones(true);
             if (lista == null)
             {
                 MessageBox.Show("Error al conectar con la base de datos");
@@ -39,7 +39,7 @@ namespace ProyectoEstacionamientos
                     Close();
                     return;
                }
-                foreach (CajonEstacionamiento cajon in lista)
+                foreach (clases.VehiculoEstacionado cajon in lista)
                 {
                     comboBoxCajones.Items.Add(cajon.GetClave());
                     comboBoxCajones.SelectedIndex = 0;

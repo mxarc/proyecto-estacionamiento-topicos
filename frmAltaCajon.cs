@@ -57,7 +57,7 @@ namespace ProyectoEstacionamientos
             }
             Cursor = Cursors.WaitCursor;
             // pasaron validaciones, hora de crear objeto cajón estacionamiento
-            CajonEstacionamiento lugarEstacionamiento = new CajonEstacionamiento(int.Parse(clave), descripcion, checkEstatus);
+            clases.VehiculoEstacionado lugarEstacionamiento = new clases.VehiculoEstacionado(int.Parse(clave), descripcion, checkEstatus);
             // guardar lugar estacionamiento en la base de datos
             CapaPersistencia capaPersistencia = new CapaPersistencia();
             // pero checar que la clave sea unica

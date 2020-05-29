@@ -12,6 +12,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +47,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ProyectoEstacionamientos.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>cone.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="LibreriaBD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -50,23 +72,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clases\Propietario.cs" />
-    <Compile Include="clases\Auto.cs" />
-    <Compile Include="clases\CajonEstacionamiento.cs" />
-    <Compile Include="clases\Pension.cs" />
-    <Compile Include="clases\Utilidades.cs" />
-    <Compile Include="clases\Validadores.cs" />
+    <Compile Include="FrmSalidaVehiculo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSalidaVehiculo.Designer.cs">
+      <DependentUpon>FrmSalidaVehiculo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Propietario.cs" />
+    <Compile Include="VehiculoEstacionado.cs" />
+    <Compile Include="CajonEstacionamiento.cs" />
+    <Compile Include="Pension.cs" />
+    <Compile Include="Utilidades.cs" />
+    <Compile Include="Validadores.cs" />
     <Compile Include="FrmAltaPensiones.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmAltaPensiones.Designer.cs">
       <DependentUpon>FrmAltaPensiones.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmAltaVehiculo.cs">
+    <Compile Include="FrmEntradaVehiculo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAltaVehiculo.Designer.cs">
-      <DependentUpon>FrmAltaVehiculo.cs</DependentUpon>
+    <Compile Include="FrmEntradaVehiculo.Designer.cs">
+      <DependentUpon>FrmEntradaVehiculo.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmConsultaAutosEstacionados.cs">
       <SubType>Form</SubType>
@@ -101,14 +129,11 @@
     <Compile Include="Persistencia.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmAltaPensiones.es-MX.resx">
-      <DependentUpon>FrmAltaPensiones.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmAltaPensiones.resx">
       <DependentUpon>FrmAltaPensiones.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmAltaVehiculo.resx">
-      <DependentUpon>FrmAltaVehiculo.cs</DependentUpon>
+    <EmbeddedResource Include="FrmEntradaVehiculo.resx">
+      <DependentUpon>FrmEntradaVehiculo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaAutosEstacionados.resx">
       <DependentUpon>FrmConsultaAutosEstacionados.cs</DependentUpon>
@@ -124,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmAltaCajon.resx">
       <DependentUpon>FrmAltaCajon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSalidaVehiculo.resx">
+      <DependentUpon>FrmSalidaVehiculo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -147,15 +175,27 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="res\carros.png" />
-    <Content Include="res\cone.ico" />
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cone.ico" />
+    <Content Include="imagenes\carros.png" />
+    <Content Include="imagenes\cone.ico" />
+    <Content Include="imagenes\icons8-paid-parking-96.png" />
     <Content Include="LibreriaBD.dll" />
-    <Content Include="res\icons8-car-roof-box-96.png" />
-    <Content Include="res\icons8-multiline-text-50.png" />
-    <Content Include="res\parking.png" />
-    <Content Include="res\pattern.png" />
+    <Content Include="imagenes\icons8-car-roof-box-96.png" />
+    <Content Include="imagenes\parking.png" />
+    <Content Include="imagenes\pattern.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

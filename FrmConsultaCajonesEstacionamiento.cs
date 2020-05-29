@@ -22,7 +22,7 @@ namespace ProyectoEstacionamientos
         private void FrmConsultaCajonesEstacionamiento_Load(object sender, EventArgs e)
         {
             CapaPersistencia persistencia = new CapaPersistencia();
-            List<CajonEstacionamiento> lista = persistencia.RegresaCajones();
+            List<clases.VehiculoEstacionado> lista = persistencia.RegresaCajones();
             if (lista == null)
             {
                 MessageBox.Show("Error al conectar con BD");
@@ -33,10 +33,10 @@ namespace ProyectoEstacionamientos
             }
             else
             {
-                foreach (CajonEstacionamiento lugar in lista)
+                foreach (clases.VehiculoEstacionado lugar in lista)
                 {
                     string estatus = lugar.GetOcupado() ? "Ocupado" : "Disponible";
-                    this.dataGridView1.Rows.Add(lugar.GetClave(), estatus, lugar.GetDescripcion());
+                    dataGridView1.Rows.Add(lugar.GetClave(), estatus, lugar.GetDescripcion());
                 }
             }
         }

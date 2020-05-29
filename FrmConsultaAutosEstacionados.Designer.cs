@@ -51,10 +51,11 @@
             this.Cajon});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(800, 450);
+            this.dataGridView1.Size = new System.Drawing.Size(600, 366);
             this.dataGridView1.TabIndex = 0;
             // 
             // CodigoEntrada
@@ -70,7 +71,7 @@
             this.MatriculaAuto.HeaderText = "Matrícula";
             this.MatriculaAuto.Name = "MatriculaAuto";
             this.MatriculaAuto.ReadOnly = true;
-            this.MatriculaAuto.Width = 87;
+            this.MatriculaAuto.Width = 77;
             // 
             // HoraEntrada
             // 
@@ -86,11 +87,12 @@
             // 
             // FrmConsultaAutosEstacionados
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
             this.Controls.Add(this.dataGridView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FrmConsultaAutosEstacionados";
             this.Text = "Consulta autos estacionados";
             this.Load += new System.EventHandler(this.FrmConsultaAutosEstacionados_Load);

@@ -10,10 +10,7 @@ namespace ProyectoEstacionamientos
     {
         public static SqlException errores;
         private static readonly string connection = "Data Source=proyecto-katy.cuudienhvlr5.us-west-1.rds.amazonaws.com;Initial Catalog=estacionamiento;Persist Security Info=True;User ID=admin;Password=puredepapa";
-
-
-
-        public void AgregarCajonEstacionamiento(CajonEstacionamiento lugarEstacionamiento)
+        public void AgregarCajonEstacionamiento(clases.VehiculoEstacionado lugarEstacionamiento)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
@@ -21,7 +18,7 @@ namespace ProyectoEstacionamientos
                 errores = UsoBD.ESalida;
                 return;
             }
-            string strComando = "INSERT INTO Cajones(Clave, Ocupado, Descripcion)";
+            string strComando = "INSERT INTO Cajones (Clave, Ocupado, Descripcion)";
             strComando += " VALUES (@clave,@ocupado,@descripcion)";
             SqlCommand cmd = new SqlCommand(strComando, conn);
             cmd.Parameters.AddWithValue("@clave", lugarEstacionamiento.GetClave());
@@ -40,7 +37,7 @@ namespace ProyectoEstacionamientos
             conn.Close();
         }
 
-        public List<CajonEstacionamiento> RegresaCajones(bool disponibles = false)
+        public List<clases.VehiculoEstacionado> RegresaCajones(bool disponibles = false)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
@@ -57,7 +54,7 @@ namespace ProyectoEstacionamientos
                 conn.Close();
                 return null;
             }
-            List<CajonEstacionamiento> lista = new List<CajonEstacionamiento>();
+            List<clases.VehiculoEstacionado> lista = new List<clases.VehiculoEstacionado>();
             if (lector.HasRows)
             {
                 while (lector.Read())
@@ -65,13 +62,43 @@ namespace ProyectoEstacionamientos
                     int clave = int.Parse(lector.GetValue(0).ToString());
                     bool ocupado = bool.Parse(lector.GetValue(1).ToString());
                     string descripcion = lector.GetValue(2).ToString();
-                    CajonEstacionamiento lugarEstacionamiento
-                        = new CajonEstacionamiento(clave, descripcion, ocupado);
+                    clases.VehiculoEstacionado lugarEstacionamiento
+                        = new clases.VehiculoEstacionado(clave, descripcion, ocupado);
                     lista.Add(lugarEstacionamiento);
                 }
             }
             conn.Close();
             return lista;
+        }
+
+        public int DiferenciaMinutos(string matricula)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return false;
+            }
+            string strComando = "SELECT * FROM RegistroEntradas WHERE MatriculaAuto = @matricula";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@matricula", matricula);
+            bool resultado = false;
+            try
+            {
+                var r = cmd.ExecuteReader();
+                if (r.HasRows)
+                {
+                    resultado = true;
+                }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return true;
+            }
+            conn.Close();
+            return resultado;
         }
 
         public bool ClaveCajonExiste(string clave)
@@ -112,7 +139,7 @@ namespace ProyectoEstacionamientos
                 errores = UsoBD.ESalida;
                 return;
             }
-            string strComando = "INSERT INTO RegistroEntradasSalidas(CodigoEntrada, MatriculaAuto, CajonID)";
+            string strComando = "INSERT INTO RegistroEntradas (CodigoEntrada, MatriculaAuto, CajonID)";
             strComando += " VALUES (@codigo,@matricula,@cajon)";
             SqlCommand cmd = new SqlCommand(strComando, conn);
             cmd.Parameters.AddWithValue("@codigo", codigo);
@@ -137,6 +164,36 @@ namespace ProyectoEstacionamientos
             conn.Close();
         }
 
+        public bool MatriculaYaEstaEstacionada(string matricula)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return false;
+            }
+            string strComando = "SELECT * FROM RegistroEntradas WHERE MatriculaAuto = @matricula";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@matricula", matricula);
+            bool resultado = false;
+            try
+            {
+                var r = cmd.ExecuteReader();
+                if (r.HasRows)
+                {
+                    resultado = true;
+                }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return true;
+            }
+            conn.Close();
+            return resultado;
+        }
+
         public bool CodigoEntradaExiste(string codigo)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
@@ -145,7 +202,7 @@ namespace ProyectoEstacionamientos
                 errores = UsoBD.ESalida;
                 return false;
             }
-            string strComando = "SELECT * FROM RegistroEntradasSalidas WHERE CodigoEntrada = @codigo";
+            string strComando = "SELECT * FROM RegistroEntradas WHERE CodigoEntrada = @codigo";
             SqlCommand cmd = new SqlCommand(strComando, conn);
             cmd.Parameters.AddWithValue("@codigo", codigo);
             bool resultado = false;
@@ -166,6 +223,41 @@ namespace ProyectoEstacionamientos
             conn.Close();
             return resultado;
         }
+
+        public List<VehiculoEstacionado> RegresaVehiculosEstacionados()
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return null;
+            }
+            SqlDataReader lector;
+            string strComand = "SELECT CodigoEntrada, MatriculaAuto, HoraEntrada, CajonID FROM RegistroEntradas";
+            lector = UsoBD.Consulta(strComand, conn);
+            if (lector == null)
+            {
+                errores = UsoBD.ESalida;
+                conn.Close();
+                return null;
+            }
+            List<VehiculoEstacionado> lista = new List<VehiculoEstacionado>();
+            if (lector.HasRows)
+            {
+                while (lector.Read())
+                {
+                    string codigoEntrada = lector.GetValue(0).ToString();
+                    string matriculaAuto = lector.GetValue(1).ToString();
+                    string horaEntrada = lector.GetValue(2).ToString();
+                    int cajonID = int.Parse(lector.GetValue(3).ToString());
+                    VehiculoEstacionado vehiculoEstacionado = new VehiculoEstacionado(codigoEntrada, matriculaAuto, horaEntrada, cajonID);
+                    lista.Add(vehiculoEstacionado);
+                }
+            }
+            conn.Close();
+            return lista;
+        }
+
 
 
         /*

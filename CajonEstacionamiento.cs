@@ -1,12 +1,12 @@
 ﻿namespace ProyectoEstacionamientos.clases
 {
-    class CajonEstacionamiento
+    class VehiculoEstacionado
     {
         private int clave;
         private string descripcion;
         private bool ocupado;
 
-        public CajonEstacionamiento(int clave, string descripcion, bool ocupado)
+        public VehiculoEstacionado(int clave, string descripcion, bool ocupado)
         {
             this.clave = clave;
             this.descripcion = descripcion;
