@@ -126,7 +126,7 @@
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(9, 7);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(56, 54);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -153,7 +153,7 @@
             // 
             this.comboBoxCajones.FormattingEnabled = true;
             this.comboBoxCajones.Location = new System.Drawing.Point(266, 110);
-            this.comboBoxCajones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxCajones.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxCajones.Name = "comboBoxCajones";
             this.comboBoxCajones.Size = new System.Drawing.Size(98, 21);
             this.comboBoxCajones.TabIndex = 31;
@@ -189,7 +189,7 @@
             this.buttonGenerarCodigo.UseVisualStyleBackColor = true;
             this.buttonGenerarCodigo.Click += new System.EventHandler(this.ButtonGenerarCodigo_Click);
             // 
-            // FrmAltaVehiculo
+            // FrmEntradaVehiculo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -210,8 +210,9 @@
             this.Controls.Add(this.labelClave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.Name = "FrmAltaVehiculo";
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Name = "FrmEntradaVehiculo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Registro entrada de automóvil";
             this.Load += new System.EventHandler(this.FrmAltaVehiculo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

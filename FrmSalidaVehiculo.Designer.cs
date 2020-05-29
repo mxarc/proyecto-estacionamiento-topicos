@@ -114,6 +114,7 @@
             this.buttonContinuar.TabIndex = 37;
             this.buttonContinuar.Text = "Continuar";
             this.buttonContinuar.UseVisualStyleBackColor = true;
+            this.buttonContinuar.Click += new System.EventHandler(this.ButtonContinuar_Click);
             // 
             // textBoxCodigoEntrada
             // 
@@ -163,7 +164,9 @@
             this.Controls.Add(this.labelClave);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmSalidaVehiculo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Salida de vehículo";
+            this.Load += new System.EventHandler(this.FrmSalidaVehiculo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

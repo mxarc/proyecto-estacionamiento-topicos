@@ -71,6 +71,37 @@ namespace ProyectoEstacionamientos
             return lista;
         }
 
+        public int DiferenciaMinutosMatricula(string matriculaAuto)
+        {
+
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return 0;
+            }
+            string strComando = "SELECT DiffMinutos=DATEDIFF(minute, HoraEntrada, GETDATE()) FROM RegistroEntradas WHERE MatriculaAuto = @matricula";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@matricula", matriculaAuto);
+            int diff = 0;
+            try
+            {
+                var lector = cmd.ExecuteReader();
+                while (lector.Read())
+                {
+                    diff = lector.GetInt32(0);
+                }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return diff;
+            }
+            conn.Close();
+            return diff;
+        }
+
         public int DiferenciaMinutos(string codigoEntrada)
         {
 
@@ -80,22 +111,23 @@ namespace ProyectoEstacionamientos
                 errores = UsoBD.ESalida;
                 return 0;
             }
-            SqlDataReader lector;
-            string strComando = "SELECT DiffMinutos=DATEDIFF(minute, HoraEntrada, GETDATE()) FROM RegistroEntradas WHERE CodigoEntrada= " + codigoEntrada.Trim();
-            lector = UsoBD.Consulta(strComando, conn);
-            if (lector == null)
-            {
-                errores = UsoBD.ESalida;
-                conn.Close();
-                return 0;
-            }
+            string strComando = "SELECT DiffMinutos=DATEDIFF(minute, HoraEntrada, GETDATE()) FROM RegistroEntradas WHERE CodigoEntrada = @codigoEntrada";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@codigoEntrada", codigoEntrada);
             int diff = 0;
-            if (lector.HasRows)
+            try
             {
+                var lector = cmd.ExecuteReader();
                 while (lector.Read())
                 {
-                    diff = int.Parse(lector.GetValue(0).ToString());
+                    diff = lector.GetInt32(0);
                 }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return diff;
             }
             conn.Close();
             return diff;
