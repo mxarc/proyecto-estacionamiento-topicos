@@ -162,7 +162,9 @@
             this.Controls.Add(this.buttonContinuar);
             this.Controls.Add(this.textBoxCodigoEntrada);
             this.Controls.Add(this.labelClave);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FrmSalidaVehiculo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Salida de vehículo";

@@ -104,7 +104,6 @@ namespace ProyectoEstacionamientos
 
         public int DiferenciaMinutos(string codigoEntrada)
         {
-
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
             {
@@ -181,6 +180,35 @@ namespace ProyectoEstacionamientos
             string strComandoUpdate = "UPDATE Cajones SET Ocupado = 1 WHERE Clave=@clave";
             SqlCommand cmdUpdate = new SqlCommand(strComandoUpdate, conn);
             cmdUpdate.Parameters.AddWithValue("@clave", cajon);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                cmdUpdate.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                errores = e;
+                conn.Close();
+                return;
+            }
+            conn.Close();
+        }
+
+        public void SalidaVehiculoCodigoEntrada(string codigo)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return;
+            }
+            string strComando = "UPDATE RegistroEntradas SET (CodigoEntrada, MatriculaAuto, CajonID)";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            // actualizar estado de un cajon
+            string strComandoUpdate = "UPDATE Cajones SET Ocupado = 1 WHERE Clave=@clave";
+            SqlCommand cmdUpdate = new SqlCommand(strComandoUpdate, conn);
+            cmdUpdate.Parameters.AddWithValue("@clave", codigo);
             try
             {
                 cmd.ExecuteNonQuery();

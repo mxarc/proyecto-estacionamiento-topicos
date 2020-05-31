@@ -19,6 +19,11 @@ namespace ProyectoEstacionamientos
             InitializeComponent();
         }
 
+        private void FrmSalidaVehiculo_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void ButtonSalir_Click(object sender, EventArgs e)
         {
             Close();
@@ -38,7 +43,7 @@ namespace ProyectoEstacionamientos
         private int CalcularLosCostos(int minutos)
         {
 
-            int costo = 15;
+            int costo = 15; // costo inicial
             int horas = (int)(minutos / 60); // convertir a horas
                                              // sumar la hora
             for (int i = 0; i < horas; i++)
@@ -57,14 +62,14 @@ namespace ProyectoEstacionamientos
             {
                 errorP.SetError(textBoxCodigoEntrada, "No puede estar vacio");
                 MessageBox.Show("El código de entrada está vacio, no se puede consultar costo sin el",
-    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (codigoEntrada.Length > 8)
             {
                 errorP.SetError(textBoxCodigoEntrada, "Muy largo");
                 MessageBox.Show("El código de entrada no tiene más de 8 caracteres de longitud",
-    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             CapaPersistencia capaPersistencia = new CapaPersistencia();
@@ -73,7 +78,7 @@ namespace ProyectoEstacionamientos
             {
                 errorP.SetError(textBoxCodigoEntrada, "No existe");
                 MessageBox.Show("No se encontró este código de entrada en la BD",
-    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             Cursor = Cursors.WaitCursor;
@@ -82,8 +87,18 @@ namespace ProyectoEstacionamientos
             Console.WriteLine(diffMinutos);
             int costo = CalcularLosCostos(diffMinutos);
             Cursor = Cursors.Arrow;
-            MessageBox.Show("Costo: $" + costo);
-            // convertir a minutos
+            int horas = diffMinutos / 60;
+            int minutosRestantes = diffMinutos % 60;
+            var confirmResult = MessageBox.Show("Deseas registrar salida del automóvil?",
+                         "Confirmar salida",
+                         MessageBoxButtons.YesNo);
+            MessageBox.Show("Total horas: " + horas + "\nFracción minutos: " + minutosRestantes + "\nSe van a cobrar en total: $" + costo,
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            if (confirmResult == DialogResult.Yes)
+            {
+             // quitarlo de la BD
+            }
+ 
         }
 
         private void ButtonContinuar_Click(object sender, EventArgs e)
@@ -95,7 +110,6 @@ namespace ProyectoEstacionamientos
             if (boletoPerdido)
             {
                 string matriculaAuto = Prompt.ShowDialog("Introduce la matrícula").Trim();
-
                 // validar que matricula no sea vacio:
                 if (Validadores.ValidaNoVacio(matriculaAuto))
                 {
@@ -112,12 +126,16 @@ namespace ProyectoEstacionamientos
                             "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                int diffMinutos = capaPersistencia.DiferenciaMinutos(matriculaAuto);
-                Console.WriteLine(diffMinutos);
+                int diffMinutos = capaPersistencia.DiferenciaMinutosMatricula(matriculaAuto);
+                Console.WriteLine("Diff minutos: " + diffMinutos);
                 int costo = CalcularLosCostos(diffMinutos);
                 Cursor = Cursors.Arrow;
                 // aplicar penalización boleto perdido
-                MessageBox.Show("Costo: $" + costo);
+                costo += 80;
+                int horas = diffMinutos / 60;
+                int minutosRestantes = diffMinutos % 60;
+                MessageBox.Show("Total horas: " + horas + "\nFracción minutos: " + minutosRestantes + " \nPenalización boleto: $80\nSe van a cobrar en total: $" + costo,
+                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Question);
                 return;
             }
             // flujo normal
@@ -138,10 +156,6 @@ namespace ProyectoEstacionamientos
             }
         }
 
-        private void FrmSalidaVehiculo_Load(object sender, EventArgs e)
-        {
-
-        }
     }
     public static class Prompt
     {
