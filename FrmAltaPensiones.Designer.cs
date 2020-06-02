@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAltaPensiones));
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxMatriculaAuto = new System.Windows.Forms.TextBox();
@@ -51,8 +52,10 @@
             this.buttonGuardar = new System.Windows.Forms.Button();
             this.labelCuotaPagar = new System.Windows.Forms.Label();
             this.textBoxApellidoPropietario = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -62,13 +65,17 @@
             // 
             // textBoxMatriculaAuto
             // 
+            this.textBoxMatriculaAuto.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             resources.ApplyResources(this.textBoxMatriculaAuto, "textBoxMatriculaAuto");
             this.textBoxMatriculaAuto.Name = "textBoxMatriculaAuto";
+            this.textBoxMatriculaAuto.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxMatriculaAuto_KeyUp);
             // 
             // textBoxModeloAuto
             // 
+            this.textBoxModeloAuto.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             resources.ApplyResources(this.textBoxModeloAuto, "textBoxModeloAuto");
             this.textBoxModeloAuto.Name = "textBoxModeloAuto";
+            this.textBoxModeloAuto.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxModeloAuto_KeyUp);
             // 
             // label2
             // 
@@ -77,8 +84,10 @@
             // 
             // textBoxNombrePropietario
             // 
+            this.textBoxNombrePropietario.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             resources.ApplyResources(this.textBoxNombrePropietario, "textBoxNombrePropietario");
             this.textBoxNombrePropietario.Name = "textBoxNombrePropietario";
+            this.textBoxNombrePropietario.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxNombrePropietario_KeyUp);
             // 
             // label3
             // 
@@ -89,6 +98,7 @@
             // 
             resources.ApplyResources(this.dateTimePickerFechaVencimiento, "dateTimePickerFechaVencimiento");
             this.dateTimePickerFechaVencimiento.Name = "dateTimePickerFechaVencimiento";
+            this.dateTimePickerFechaVencimiento.ValueChanged += new System.EventHandler(this.DateTimePickerFechaVencimiento_ValueChanged);
             // 
             // label5
             // 
@@ -168,6 +178,7 @@
             resources.ApplyResources(this.buttonGuardar, "buttonGuardar");
             this.buttonGuardar.Name = "buttonGuardar";
             this.buttonGuardar.UseVisualStyleBackColor = true;
+            this.buttonGuardar.Click += new System.EventHandler(this.ButtonGuardar_Click);
             // 
             // labelCuotaPagar
             // 
@@ -176,8 +187,14 @@
             // 
             // textBoxApellidoPropietario
             // 
+            this.textBoxApellidoPropietario.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             resources.ApplyResources(this.textBoxApellidoPropietario, "textBoxApellidoPropietario");
             this.textBoxApellidoPropietario.Name = "textBoxApellidoPropietario";
+            this.textBoxApellidoPropietario.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxApellidoPropietario_KeyUp);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // FrmAltaPensiones
             // 
@@ -208,6 +225,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,5 +255,6 @@
         private System.Windows.Forms.Button buttonGuardar;
         private System.Windows.Forms.Label labelCuotaPagar;
         private System.Windows.Forms.TextBox textBoxApellidoPropietario;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

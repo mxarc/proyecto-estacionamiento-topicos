@@ -137,6 +137,15 @@ namespace ProyectoEstacionamientos
                 MessageBox.Show("Ese cajón no existe", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            // validador de pension, no guardar nada si está pensionado
+            if (capaPersistencia.MatriculaYaEstaPensionada(matricula))
+            {
+                MessageBox.Show("Vehículo en pensión", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarValores();
+                Cursor = Cursors.Arrow;
+                return;
+            }
+
             // todo bien, guardar entrada vehiculo:
             capaPersistencia.AgregarEntradaVehiculo(codigo, matricula, int.Parse(cajon));
             Cursor = Cursors.Arrow;

@@ -46,6 +46,8 @@
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.titleLabel = new System.Windows.Forms.Label();
+            this.modificarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cajónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -58,6 +60,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.registrosToolStripMenuItem,
             this.consultaToolStripMenuItem,
+            this.modificarToolStripMenuItem,
             this.masToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -82,7 +85,7 @@
             this.cajónDeEstacionamientoToolStripMenuItem,
             this.pensiónToolStripMenuItem});
             this.altasToolStripMenuItem.Name = "altasToolStripMenuItem";
-            this.altasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.altasToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.altasToolStripMenuItem.Text = "Altas";
             // 
             // cajónDeEstacionamientoToolStripMenuItem
@@ -105,20 +108,20 @@
             this.entradaToolStripMenuItem,
             this.salidaToolStripMenuItem});
             this.autosToolStripMenuItem.Name = "autosToolStripMenuItem";
-            this.autosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.autosToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.autosToolStripMenuItem.Text = "Autos";
             // 
             // entradaToolStripMenuItem
             // 
             this.entradaToolStripMenuItem.Name = "entradaToolStripMenuItem";
-            this.entradaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entradaToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.entradaToolStripMenuItem.Text = "Entrada";
             this.entradaToolStripMenuItem.Click += new System.EventHandler(this.EntradaToolStripMenuItem_Click);
             // 
             // salidaToolStripMenuItem
             // 
             this.salidaToolStripMenuItem.Name = "salidaToolStripMenuItem";
-            this.salidaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.salidaToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.salidaToolStripMenuItem.Text = "Salida";
             this.salidaToolStripMenuItem.Click += new System.EventHandler(this.SalidaToolStripMenuItem_Click);
             // 
@@ -200,6 +203,22 @@
             this.titleLabel.TabIndex = 3;
             this.titleLabel.Text = "Sistema de estacionamiento";
             // 
+            // modificarToolStripMenuItem
+            // 
+            this.modificarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cajónToolStripMenuItem});
+            this.modificarToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.modificarToolStripMenuItem.Name = "modificarToolStripMenuItem";
+            this.modificarToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.modificarToolStripMenuItem.Text = "Modificar";
+            // 
+            // cajónToolStripMenuItem
+            // 
+            this.cajónToolStripMenuItem.Name = "cajónToolStripMenuItem";
+            this.cajónToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cajónToolStripMenuItem.Text = "Cajón";
+            this.cajónToolStripMenuItem.Click += new System.EventHandler(this.cajónToolStripMenuItem_Click);
+            // 
             // FrmMenuPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -245,6 +264,8 @@
         private System.Windows.Forms.ToolStripMenuItem salidaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lugaresParaEstacionarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autosEstacionadosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modificarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cajónToolStripMenuItem;
     }
 }
 

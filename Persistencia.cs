@@ -10,6 +10,79 @@ namespace ProyectoEstacionamientos
     {
         public static SqlException errores;
         private static readonly string connection = "Data Source=proyecto-katy.cuudienhvlr5.us-west-1.rds.amazonaws.com;Initial Catalog=estacionamiento;Persist Security Info=True;User ID=admin;Password=puredepapa";
+
+        public void AgregarPension(Pension pension)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return;
+            }
+            string strInsertPropietario = "INSERT INTO Propietarios (Nombre, Apellido) VALUES (@nombre, @apellido)";
+            SqlCommand cmdPropietario = new SqlCommand(strInsertPropietario, conn);
+            cmdPropietario.Parameters.AddWithValue("@nombre", pension.GetNombrePropietario());
+            cmdPropietario.Parameters.AddWithValue("@apellido", pension.GetApellidoPropietario());
+            try
+            {
+                cmdPropietario.ExecuteNonQuery();
+            } catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return;
+            }
+            // ahora necesitamos el ID del insert que hicimos previamente
+            string strComandoPropietarioID = "SELECT ID FROM Propietarios WHERE Nombre=@nombre AND Apellido=@apellido";
+            SqlCommand cmdPropietarioId = new SqlCommand(strComandoPropietarioID, conn);
+            cmdPropietarioId.Parameters.AddWithValue("@nombre", pension.GetNombrePropietario());
+            cmdPropietarioId.Parameters.AddWithValue("@apellido", pension.GetApellidoPropietario());
+            // sacar el propietario ID para luego poder registrar la pensión con ese ID asociado
+            int propietarioID = 1;
+            try
+            {
+                var lector = cmdPropietarioId.ExecuteReader();
+                while (lector.Read())
+                {
+                    propietarioID = lector.GetInt32(0);
+                }
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                errores = e;
+                conn.Close();
+                return;
+            }
+            cmdPropietarioId.Dispose();
+            conn.Close();
+            conn.Open();
+            // ahora si guardar pensión en la BD
+            string strComando = "INSERT INTO Pensiones (MatriculaAuto, ModeloAuto, FechaAlta, FechaVencimiento," +
+                "CuotaPago, PropietarioID, CajonID)";
+            strComando += " VALUES (@matriculaAuto,@modeloAuto,@fechaAlta,@fechaVencimiento,@cuota,@propietarioID,@cajonID)";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@matriculaAuto", pension.GetMatriculaAuto());
+            cmd.Parameters.AddWithValue("@modeloAuto", pension.GetModelo());
+            cmd.Parameters.AddWithValue("@fechaAlta", pension.GetFechaIngreso());
+            cmd.Parameters.AddWithValue("@fechaVencimiento", pension.GetFechaVencimiento());
+            cmd.Parameters.AddWithValue("@cuota", pension.GetCuota());
+            cmd.Parameters.AddWithValue("@propietarioID", propietarioID);
+            cmd.Parameters.AddWithValue("@cajonID", pension.GetCajonID());
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return;
+            }
+            conn.Close();
+        }
+
         public void AgregarCajonEstacionamiento(clases.VehiculoEstacionado lugarEstacionamiento)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
@@ -35,6 +108,62 @@ namespace ProyectoEstacionamientos
                 return;
             }
             conn.Close();
+        }
+
+        public void ModificarDescripcionCajon(int cajonID, string descripcion)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return;
+            }
+            string strComando = "UPDATE Cajones SET descripcion=@descripcion WHERE Clave=@cajonID";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@cajonID", cajonID);
+            cmd.Parameters.AddWithValue("@descripcion", descripcion);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return;
+            }
+            conn.Close();
+        }
+
+
+        public string RegresaDescripcionCajon(int idCajon)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return "";
+            }
+            string strComando = "SELECT Descripcion FROM Cajones WHERE Clave = @idCajon";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@idCajon", idCajon);
+            string descripcion = "";
+            try
+            {
+                var lector = cmd.ExecuteReader();
+                while (lector.Read())
+                {
+                    descripcion = lector.GetString(0);
+                }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return descripcion;
+            }
+            conn.Close();
+            return descripcion;
         }
 
         public List<clases.VehiculoEstacionado> RegresaCajones(bool disponibles = false)
@@ -71,6 +200,47 @@ namespace ProyectoEstacionamientos
             return lista;
         }
 
+        public List<Pension> RegresaPensiones()
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return null;
+            }
+            SqlDataReader lector;
+            string strComand = "SELECT MatriculaAuto, ModeloAuto, FechaAlta, FechaVencimiento, CuotaPago, Nombre, Apellido, CajonID" +
+" FROM Pensiones INNER JOIN Propietarios P on Pensiones.PropietarioID = P.ID";
+            lector = UsoBD.Consulta(strComand, conn);
+            if (lector == null)
+            {
+                errores = UsoBD.ESalida;
+                conn.Close();
+                return null;
+            }
+            List<Pension> lista = new List<Pension>();
+            if (lector.HasRows)
+            {
+                while (lector.Read())
+                {
+                    string matriculaAuto = lector.GetString(0);
+                    string modeloAuto = lector.GetString(1);
+                    DateTime fechaAlta = lector.GetDateTime(2);
+                    DateTime fechaVencimiento = lector.GetDateTime(3);
+                    int cuota = lector.GetInt32(4);
+                    string nombre = lector.GetString(5);
+                    string apellido = lector.GetString(6);
+                    int cajonID = lector.GetInt32(7);
+                    Pension pension = new Pension(matriculaAuto, modeloAuto, nombre,
+                        apellido, fechaAlta, fechaVencimiento, cuota, cajonID);
+                    lista.Add(pension);
+                }
+            }
+            conn.Close();
+            return lista;
+        }
+
+
         public int DiferenciaMinutosMatricula(string matriculaAuto)
         {
 
@@ -102,7 +272,7 @@ namespace ProyectoEstacionamientos
             return diff;
         }
 
-        public int DiferenciaMinutos(string codigoEntrada)
+        public int DiferenciaMinutosCodigo(string codigoEntrada)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
@@ -195,7 +365,9 @@ namespace ProyectoEstacionamientos
             conn.Close();
         }
 
-        public void SalidaVehiculoCodigoEntrada(string codigo)
+    
+
+        public void SalidaCodigo(string codigo)
         {
             SqlConnection conn = UsoBD.ConectaBD(connection);
             if (conn == null)
@@ -203,15 +375,41 @@ namespace ProyectoEstacionamientos
                 errores = UsoBD.ESalida;
                 return;
             }
-            string strComando = "UPDATE RegistroEntradas SET (CodigoEntrada, MatriculaAuto, CajonID)";
-            SqlCommand cmd = new SqlCommand(strComando, conn);
-            // actualizar estado de un cajon
-            string strComandoUpdate = "UPDATE Cajones SET Ocupado = 1 WHERE Clave=@clave";
-            SqlCommand cmdUpdate = new SqlCommand(strComandoUpdate, conn);
-            cmdUpdate.Parameters.AddWithValue("@clave", codigo);
+            string strComandoCajonID = "SELECT CajonID FROM RegistroEntradas WHERE CodigoEntrada=@codigo";
+            SqlCommand cmdCajonId = new SqlCommand(strComandoCajonID, conn);
+            cmdCajonId.Parameters.AddWithValue("@codigo", codigo);
+            // sacar el cajon ID para luego cambiar su estado xd
+            string cajonId = "";
             try
             {
-                cmd.ExecuteNonQuery();
+                var lector = cmdCajonId.ExecuteReader();
+                while (lector.Read())
+                {
+                    cajonId = lector.GetValue(0).ToString();
+                }
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                errores = e;
+                conn.Close();
+                return;
+            }
+            cmdCajonId.Dispose();
+            conn.Close();
+            conn.Open();
+            // ahora que tenemos el cajon ID podemos proceder a borrar el registro de entrada y también actualizar el estado de esa cajon
+            string strComandoDelete = "DELETE FROM RegistroEntradas WHERE CodigoEntrada=@codigo";
+            SqlCommand cmdDelete = new SqlCommand(strComandoDelete, conn);
+            cmdDelete.Parameters.AddWithValue("@codigo", codigo);
+            // actualizar estado de un cajon
+            string strComandoUpdate = "UPDATE Cajones SET Ocupado = 0 WHERE Clave=@clave";
+            SqlCommand cmdUpdate = new SqlCommand(strComandoUpdate, conn);
+            cmdUpdate.Parameters.AddWithValue("@clave", cajonId);
+            try
+            {
+                cmdDelete.ExecuteNonQuery();
                 cmdUpdate.ExecuteNonQuery();
             }
             catch (SqlException e)
@@ -222,6 +420,92 @@ namespace ProyectoEstacionamientos
                 return;
             }
             conn.Close();
+        }
+
+        public void SalidaVehiculoMatricula(string matricula)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return;
+            }
+            string strComandoCajonID = "SELECT CajonID FROM RegistroEntradas WHERE MatriculaAuto=@matricula";
+            SqlCommand cmdCajonId = new SqlCommand(strComandoCajonID, conn);
+            cmdCajonId.Parameters.AddWithValue("@matricula", matricula);
+            // sacar el cajon ID para luego cambiar su estado xd
+            string cajonId = "";
+            try
+            {
+                var lector = cmdCajonId.ExecuteReader();
+                while (lector.Read())
+                {
+                    cajonId = lector.GetValue(0).ToString();
+                }
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                errores = e;
+                conn.Close();
+                return;
+            }
+            cmdCajonId.Dispose();
+            conn.Close();
+            conn.Open();
+            // ahora que tenemos el cajon ID podemos proceder a borrar el registro de entrada y también actualizar el estado de esa cajon
+            string strComandoDelete = "DELETE FROM RegistroEntradas WHERE MatriculaAuto=@matricula";
+            SqlCommand cmdDelete = new SqlCommand(strComandoDelete, conn);
+            cmdDelete.Parameters.AddWithValue("@matricula", matricula);
+            // actualizar estado de un cajon
+            string strComandoUpdate = "UPDATE Cajones SET Ocupado = 0 WHERE Clave=@clave";
+            SqlCommand cmdUpdate = new SqlCommand(strComandoUpdate, conn);
+            cmdUpdate.Parameters.AddWithValue("@clave", cajonId);
+            try
+            {
+                cmdDelete.ExecuteNonQuery();
+                cmdUpdate.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                errores = e;
+                conn.Close();
+                return;
+            }
+            conn.Close();
+        }
+
+
+        public bool MatriculaYaEstaPensionada(string matricula)
+        {
+            SqlConnection conn = UsoBD.ConectaBD(connection);
+            if (conn == null)
+            {
+                errores = UsoBD.ESalida;
+                return false;
+            }
+            string strComando = "SELECT * FROM Pensiones WHERE MatriculaAuto = @matricula";
+            SqlCommand cmd = new SqlCommand(strComando, conn);
+            cmd.Parameters.AddWithValue("@matricula", matricula);
+            bool resultado = false;
+            try
+            {
+                var r = cmd.ExecuteReader();
+                if (r.HasRows)
+                {
+                    resultado = true;
+                }
+            }
+            catch (SqlException e)
+            {
+                errores = e;
+                conn.Close();
+                return true;
+            }
+            conn.Close();
+            return resultado;
         }
 
         public bool MatriculaYaEstaEstacionada(string matricula)

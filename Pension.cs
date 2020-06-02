@@ -1,20 +1,36 @@
-﻿namespace ProyectoEstacionamientos.clases
+﻿using System;
+
+namespace ProyectoEstacionamientos.clases
 {
     class Pension
     {
-        private string matriculaAuto, nombrePropietario, fechaIngreso, fechaVencimiento;
-        private int cuota, modelo;
+        private string matriculaAuto, modelo, nombrePropietario, apellidoPropietario;
+        private DateTime fechaIngreso, fechaVencimiento;
+        private int cuota, cajonID;
 
-        public Pension(string matriculaAuto, int modelo,
-            string nombrePropietario, string fechaIngreso,
-            string fechaVencimiento, int cuota)
+        public Pension(string matriculaAuto, string modelo,
+            string nombrePropietario, string apellidoPropietario, DateTime fechaIngreso,
+            DateTime fechaVencimiento, int cuota, int cajonID)
         {
-            this.matriculaAuto = matriculaAuto;
-            this.modelo = modelo;
-            this.nombrePropietario = nombrePropietario;
-            this.fechaIngreso = fechaIngreso;
-            this.fechaVencimiento = fechaVencimiento;
-            this.cuota = cuota;
+            SetMatriculaAuto(matriculaAuto);
+            SetModelo(modelo);
+            SetNombrePropietario(nombrePropietario);
+            SetApellidoPropietario(apellidoPropietario);
+            SetFechaIngreso(fechaIngreso);
+            SetFechaVencimiento(fechaVencimiento);
+            SetCuota(cuota);
+            SetCajonID(cajonID);
+        }
+
+
+        public void SetCajonID(int cajonID)
+        {
+            this.cajonID = cajonID;
+        }
+
+        public int GetCajonID()
+        {
+            return this.cajonID;
         }
 
         public string GetMatriculaAuto()
@@ -31,28 +47,38 @@
         {
             return nombrePropietario;
         }
-
-        public void SetNombrePropietario(string nomPropietario)
+        public string GetApellidoPropietario()
         {
-            this.nombrePropietario = nomPropietario;
+            return apellidoPropietario;
         }
 
-        public string GetFechaIngreso()
+        public void SetNombrePropietario(string nombrePropietario)
+        {
+            this.nombrePropietario = nombrePropietario;
+        }
+
+        public void SetApellidoPropietario(string apellidoPropietario)
+        {
+            this.apellidoPropietario = apellidoPropietario;
+        }
+
+
+        public DateTime GetFechaIngreso()
         {
             return fechaIngreso;
         }
 
-        public void SetFechaIngreso(string fechaIngreso)
+        public void SetFechaIngreso(DateTime fechaIngreso)
         {
             this.fechaIngreso = fechaIngreso;
         }
 
-        public string GetFechaVencimiento()
+        public DateTime GetFechaVencimiento()
         {
             return fechaVencimiento;
         }
 
-        public void SetFechaVencimiento(string fechaVencimiento)
+        public void SetFechaVencimiento(DateTime fechaVencimiento)
         {
             this.fechaVencimiento = fechaVencimiento;
         }
@@ -67,12 +93,12 @@
             this.cuota = cuota;
         }
 
-        public int GetModelo()
+        public string GetModelo()
         {
             return modelo;
         }
 
-        public void SetModelo(int modelo)
+        public void SetModelo(string modelo)
         {
             this.modelo = modelo;
         }

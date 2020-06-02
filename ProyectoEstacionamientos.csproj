@@ -72,6 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmModificarCajon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmModificarCajon.Designer.cs">
+      <DependentUpon>FrmModificarCajon.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmSalidaVehiculo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +156,9 @@
     <EmbeddedResource Include="FrmAltaCajon.resx">
       <DependentUpon>FrmAltaCajon.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmModificarCajon.resx">
+      <DependentUpon>FrmModificarCajon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmSalidaVehiculo.resx">
       <DependentUpon>FrmSalidaVehiculo.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,6 +200,7 @@
     <Content Include="cone.ico" />
     <Content Include="imagenes\carros.png" />
     <Content Include="imagenes\cone.ico" />
+    <Content Include="imagenes\icons8-edit-96.png" />
     <Content Include="imagenes\icons8-paid-parking-96.png" />
     <Content Include="LibreriaBD.dll" />
     <Content Include="imagenes\icons8-car-roof-box-96.png" />

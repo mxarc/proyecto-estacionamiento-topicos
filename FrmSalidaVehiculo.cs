@@ -83,22 +83,14 @@ namespace ProyectoEstacionamientos
             }
             Cursor = Cursors.WaitCursor;
             Console.WriteLine(textBoxCodigoEntrada.Text);
-            int diffMinutos = capaPersistencia.DiferenciaMinutos(codigoEntrada);
+            int diffMinutos = capaPersistencia.DiferenciaMinutosCodigo(codigoEntrada);
             Console.WriteLine(diffMinutos);
             int costo = CalcularLosCostos(diffMinutos);
             Cursor = Cursors.Arrow;
             int horas = diffMinutos / 60;
             int minutosRestantes = diffMinutos % 60;
-            var confirmResult = MessageBox.Show("Deseas registrar salida del automóvil?",
-                         "Confirmar salida",
-                         MessageBoxButtons.YesNo);
             MessageBox.Show("Total horas: " + horas + "\nFracción minutos: " + minutosRestantes + "\nSe van a cobrar en total: $" + costo,
                     "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Question);
-            if (confirmResult == DialogResult.Yes)
-            {
-             // quitarlo de la BD
-            }
- 
         }
 
         private void ButtonContinuar_Click(object sender, EventArgs e)
@@ -106,10 +98,13 @@ namespace ProyectoEstacionamientos
             string codigoEntrada = textBoxCodigoEntrada.Text.Trim();
             bool boletoPerdido = checkBoxBoletoPerdido.Checked;
             CapaPersistencia capaPersistencia = new CapaPersistencia();
-            // abrir dialogo para buscar por matricula
+            // abrir dialogo para buscar por matricula, flujo cuando hay boleto perdido
+            /**
+             * FLUJO BOLETO PERDIDO
+             */
             if (boletoPerdido)
             {
-                string matriculaAuto = Prompt.ShowDialog("Introduce la matrícula").Trim();
+                string matriculaAuto = Utilidades.ShowDialog("Introduce la matrícula").Trim();
                 // validar que matricula no sea vacio:
                 if (Validadores.ValidaNoVacio(matriculaAuto))
                 {
@@ -126,19 +121,37 @@ namespace ProyectoEstacionamientos
                             "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                int diffMinutos = capaPersistencia.DiferenciaMinutosMatricula(matriculaAuto);
-                Console.WriteLine("Diff minutos: " + diffMinutos);
-                int costo = CalcularLosCostos(diffMinutos);
+                int diffMinutosBoletoPerdido = capaPersistencia.DiferenciaMinutosMatricula(matriculaAuto);
+                Console.WriteLine("Diff minutos: " + diffMinutosBoletoPerdido);
+                int costoBoletoPerdido = CalcularLosCostos(diffMinutosBoletoPerdido);
                 Cursor = Cursors.Arrow;
                 // aplicar penalización boleto perdido
-                costo += 80;
-                int horas = diffMinutos / 60;
-                int minutosRestantes = diffMinutos % 60;
-                MessageBox.Show("Total horas: " + horas + "\nFracción minutos: " + minutosRestantes + " \nPenalización boleto: $80\nSe van a cobrar en total: $" + costo,
+                costoBoletoPerdido += 80;
+                int horasBoletoPerdido = diffMinutosBoletoPerdido / 60;
+                int minutosRestantesBoletoPerdido = diffMinutosBoletoPerdido % 60;
+                MessageBox.Show("Total horas: " + horasBoletoPerdido + "\nFracción minutos: "
+                    + minutosRestantesBoletoPerdido + " \nPenalización boleto: $80\nSe van a cobrar en total: $"
+                    + costoBoletoPerdido,
                         "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                // confirmar que quiere salir 
+                var confirmResultDialog = MessageBox.Show("Deseas registrar salida del automóvil?",
+ "Confirmar salida",
+ MessageBoxButtons.YesNo);
+                if (confirmResultDialog == DialogResult.No)
+                {
+                    // cancelar todo
+                    return;
+                }
+                // despachar y aplicar cambios en la capa persistencia
+                capaPersistencia.SalidaVehiculoMatricula(matriculaAuto);
+                MessageBox.Show("Auto despachado",
+        "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarValores();
                 return;
             }
-            // flujo normal
+            /**
+             * FLUJO NORMAL POR CODIGO DE ENTRADA
+             * */
             // validaciones
             if (Validadores.ValidaNoVacio(codigoEntrada))
             {
@@ -154,29 +167,40 @@ namespace ProyectoEstacionamientos
     "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-        }
-
-    }
-    public static class Prompt
-    {
-        public static string ShowDialog(string caption)
-        {
-            Form prompt = new Form()
+            // validar que codigo esta estacionada
+            Cursor = Cursors.WaitCursor;
+            if (!capaPersistencia.CodigoEntradaExiste(codigoEntrada))
             {
-                Width = 290,
-                Height = 120,
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = caption,
-                StartPosition = FormStartPosition.CenterParent
-            };
-            TextBox textBox = new TextBox() { Left = 10, Top = 10, Width = 250 };
-            Button confirmation = new Button() { Text = "Continuar", Left = 200, Width = 60, Top = 40, DialogResult = DialogResult.OK };
-            confirmation.Click += (sender, e) => { prompt.Close(); };
-            prompt.Controls.Add(textBox);
-            prompt.Controls.Add(confirmation);
-            prompt.AcceptButton = confirmation;
-
-            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+                Cursor = Cursors.Arrow;
+                MessageBox.Show("No hay ningún vehiculo con esa código de entrada estacionado",
+                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int diffMinutos = capaPersistencia.DiferenciaMinutosCodigo(codigoEntrada);
+            Console.WriteLine("Diff minutos: " + diffMinutos);
+            int costo = CalcularLosCostos(diffMinutos);
+            Cursor = Cursors.Arrow;
+            // aplicar penalización boleto perdido
+            costo += 80;
+            int horas = diffMinutos / 60;
+            int minutosRestantes = diffMinutos % 60;
+            MessageBox.Show("Total horas: " + horas + "\nFracción minutos: " + minutosRestantes + "\nSe van a cobrar en total: $" + costo,
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            // confirmar que quiere salir 
+            var confirmResult = MessageBox.Show("Deseas registrar salida del automóvil?",
+"Confirmar salida",
+MessageBoxButtons.YesNo);
+            if (confirmResult == DialogResult.No)
+            {
+                // canclear todo
+                return;
+            }
+            // despachar y aplicar cambios en la capa persistencia
+            capaPersistencia.SalidaCodigo(codigoEntrada);
+            MessageBox.Show("Auto despachado",
+    "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            LimpiarValores();
         }
+
     }
 }

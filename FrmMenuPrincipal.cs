@@ -79,5 +79,13 @@ namespace ProyectoEstacionamientos
             frmSalidaVehiculo.Show();
             Cursor = Cursors.Arrow; // change cursor to normal type
         }
+
+        private void cajónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+            FrmModificarCajon frmModificarCajon = new FrmModificarCajon();
+            frmModificarCajon.Show();
+            Cursor = Cursors.Arrow; // change cursor to normal type
+        }
     }
 }
