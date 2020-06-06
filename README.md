@@ -1,11 +1,20 @@
 # proyecto-estacionamiento-topicos
 🚗 Proyecto estacionamiento para la materia de tópicos avanzados de programación
 
-**Descripción general**
+![Menú](https://user-images.githubusercontent.com/4296205/83931469-1d60cd80-a75a-11ea-920a-0078b6c424e1.png)
 
-La aplicación manejara el cálculo de cuotas de estacionamiento para autos que pagan pensión,
-así como para autos que ingresan por horas/días. Se deben de incluir algunos reportes que permitan
-administrar correctamente el establecimiento
+**Descripción general**
+Se desarrolló una aplicación con Windows Forms que permite al usuario el manejo de cuotas de estacionamiento para autos que pagan pensión, así como autos que ingresan por horas y días. Así como reportes que permitan administrar correctamente el establecimiento.
+
+Materia: Tópicos Avanzados de Prog. 
+
+Se utilizó el entorno de desarrollo Visual Studio 2019 para el diseño de los formularios, pantallas y también funcionalidad de las mismas.
+Encontramos que Visual Studio es una herramienta bastante completa para desarrollar programas de escritorio, además de que junto al lenguaje C# son herramientas muy poderosas y no tienes que escribir tanto código para realizar una tarea a diferencia de Java y su librería Swing para desarrollo de interfaces de usuario. 
+
+Para el alojamiento de la base de datos SQLServer se desarrolló sobre un servicio de Amazon Web Services llamado RDS el cual permite levantar instancias de casi cualquier gestor de base de datos de una manera rápida y sencilla, con tan solo especificar características como almacenamiento y cual es el rendimiento que necesitamos. Se sacó ventaja de la capa gratuita de Amazon para poder usar este servicio sin ningún costo asociado a este.
+La única diferencia entre desarrollar en una base de datos local a usar RDS es que ahora la base de datos se encuentra alejada de nuestro equipo de desarrollo, esto tiene sus ventajas y desventajas pero la mayor ventaja es que permite tener los mismos datos y no requerir de una instalación local de la base de datos en donde nos encontremos utilizando la aplicación de estacionamientos.
+
+![Screenshot](https://user-images.githubusercontent.com/4296205/83931526-73ce0c00-a75a-11ea-9f1b-f77d3fc72e7f.png)
 
 ## Opciones a incluir:
 - Alta/Modificación de lugares para estacionarse: Se deben de crear objetos para que se agreguen a una
